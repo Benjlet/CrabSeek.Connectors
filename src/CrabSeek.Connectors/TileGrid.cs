@@ -8,6 +8,11 @@
 
         public TileGrid(IEnumerable<ITile> tiles)
         {
+            if (tiles == null || !tiles.Any())
+            {
+                return;
+            }
+
             var minX = tiles.Min(r => r.X);
             var maxX = tiles.Max(r => r.X);
             var minY = tiles.Min(r => r.Y);
@@ -37,10 +42,16 @@
                     sb.Append(Tiles[i, j]?.Name?[..1] ?? " ");
                 }
 
-                sb.Append(Environment.NewLine);
+                sb.AppendLine();
             }
 
             return sb.ToString();
+        }
+
+        public string[] ToStringArray()
+        {
+            var gridString = ToString();
+            return gridString.Split(Environment.NewLine, StringSplitOptions.RemoveEmptyEntries);
         }
 
         public byte[,] ToBase2ByteGrid()

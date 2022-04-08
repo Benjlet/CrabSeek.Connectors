@@ -1,10 +1,16 @@
 ﻿namespace CrabSeek.Connectors
 {
+    /// <summary>
+    /// Generates
+    /// </summary>
     public class TileGenerator
     {
         private List<ITile> _tiles;
         private List<ITile> _connectionTiles;
 
+        /// <summary>
+        /// Initialises a new configurable TileGenerator, used to generate tiles and their positions.
+        /// </summary>
         public TileGenerator()
         {
             _tiles = new List<ITile>();
@@ -12,40 +18,33 @@
         }
 
         /// <summary>
-        /// The maximum height of the room grid.
+        /// The maximum height of the room grid. 32 by default.
         /// </summary>
-        public int MaximumHeight { get; set; } = 50;
+        public int MaximumHeight { get; set; } = 32;
 
         /// <summary>
-        /// If set, the generated grid will be enclosed in a single-tiled border.
+        /// The maximum width of the room grid. 32 by default.
         /// </summary>
-        public bool IncludeBorder { get; set; } = false;
-
-        /// <summary>
-        /// The maximum width of the room grid.
-        /// </summary>
-        public int MaximumWidth { get; set; } = 50;
+        public int MaximumWidth { get; set; } = 32;
 
         /// <summary>
         /// If set, single-tile connections are generated between rooms.
-        /// Otherwise all rooms will be generated directly adjacent to each other.
+        /// Otherwise all rooms will be generated directly adjacent to each other. True by default.
         /// </summary>
         public bool UseConnectors { get; set; } = true;
 
         /// <summary>
         /// If set, all generated rooms adjacent to another room will be connected.
-        /// Lessens the appearance of dead-end corridors.
+        /// Lessens the appearance of dead-end corridors. True by default.
         /// </summary>
         public bool ConnectAllAdjacent { get; set; } = true;
 
-        private XY[] GetPositionOffsets() => new XY[]
-        {
-            new XY(UseConnectors ? Constants.TILE_STEP_CONNECTORS : Constants.TILE_STEP, 0 ),
-            new XY(UseConnectors ? -Constants.TILE_STEP_CONNECTORS : -Constants.TILE_STEP, 0 ),
-            new XY(0, UseConnectors ? -Constants.TILE_STEP_CONNECTORS : -Constants.TILE_STEP),
-            new XY(0, UseConnectors ? Constants.TILE_STEP_CONNECTORS : Constants.TILE_STEP)
-        };
-
+        /// <summary>
+        /// Generates pseudo-random room tile positions with the supplied room names.
+        /// Optionally includes connection tiles between rooms, if UseConnectors is set.
+        /// </summary>
+        /// <param name="roomNames">The name of the rooms to generate tiles for.</param>
+        /// <returns>A collection of tiles.</returns>
         public IEnumerable<ITile> GenerateTiles(IEnumerable<string> roomNames)
         {
             var roomTiles = GenerateTiles(roomNames.Count());
@@ -63,18 +62,31 @@
             return roomTiles;
         }
 
+        /// <summary>
+        /// Generates pseudo-random room tile positions with the supplied room names.
+        /// Optionally includes connection tiles between rooms, if UseConnectors is set.
+        /// </summary>
+        /// <param name="roomsToCreate">The number of rooms to generate tiles for.</param>
+        /// <returns>A collection of tiles.</returns>
         public IEnumerable<ITile> GenerateTiles(int roomsToCreate)
         {
-            _tiles = new List<ITile> 
+            _tiles = new List<ITile>();
+            _connectionTiles = new List<ITile>();
+
+            if (GreaterThanZero(roomsToCreate, MaximumHeight, MaximumWidth))
             {
-                new TileRoom(
+                _tiles.Add(new TileRoom(
                     Util.GetRandomEvenNumber(MaximumWidth),
-                    Util.GetRandomEvenNumber(MaximumHeight))
-            };
+                    Util.GetRandomEvenNumber(MaximumHeight)));
+            }
+            else
+            {
+                return _tiles;
+            }
 
-            int createdCount = 1;
+            int createdRooms = _tiles.Count;
 
-            while (createdCount < roomsToCreate)
+            while (createdRooms < roomsToCreate)
             {
                 var availableTiles = _tiles
                     .Where(t => GetAvailableAdjacentTiles(t)?.Count() > 0)?
@@ -85,7 +97,7 @@
                 if (!created)
                     break;
 
-                createdCount++;
+                createdRooms++;
             }
 
             if (UseConnectors && ConnectAllAdjacent)
@@ -129,7 +141,7 @@
                 var tileX = tile.X + offset.X;
                 var tileY = tile.Y + offset.Y;
 
-                if (tileX < 0 || tileY < 0 || tileX >= MaximumWidth || tileY >= MaximumHeight)
+                if (IsValidGridPosition(tileX, tileY))
                     continue;
 
                 var found = _tiles.Any(t => t.X == tileX && t.Y == tileY);
@@ -164,6 +176,30 @@
                 : new XY(tile.X - Constants.TILE_STEP, tile.Y);
         }
 
+        private IEnumerable<XY> GetAdjacentTiles(ITile tile)
+        {
+            var posOffset = GetPositionOffsets();
+
+            for (int i = 0; i < posOffset.Length; i++)
+            {
+                var tileX = tile.X + posOffset[i].X;
+                var tileY = tile.Y + posOffset[i].Y;
+
+                if (IsValidGridPosition(tileX, tileY))
+                    continue;
+
+                yield return new XY(tileX, tileY);
+            }
+        }
+
+        private XY[] GetPositionOffsets() => new XY[]
+        {
+            new XY(UseConnectors ? Constants.TILE_STEP_CONNECTORS : Constants.TILE_STEP, 0 ),
+            new XY(UseConnectors ? -Constants.TILE_STEP_CONNECTORS : -Constants.TILE_STEP, 0 ),
+            new XY(0, UseConnectors ? -Constants.TILE_STEP_CONNECTORS : -Constants.TILE_STEP),
+            new XY(0, UseConnectors ? Constants.TILE_STEP_CONNECTORS : Constants.TILE_STEP)
+        };
+
         private IEnumerable<XY> GetTakenAdjacentTiles(ITile tile)
         {
             var adjacentTiles = GetAdjacentTiles(tile);
@@ -176,20 +212,7 @@
             return adjacentTiles.Where(a => !_tiles.Any(t => t.HasXY(a)));
         }
 
-        private IEnumerable<XY> GetAdjacentTiles(ITile tile)
-        {
-            var posOffset = GetPositionOffsets();
-
-            for (int i = 0; i < posOffset.Length; i++)
-            {
-                var tileX = tile.X + posOffset[i].X;
-                var tileY = tile.Y + posOffset[i].Y;
-
-                if (tileX < 0 || tileY < 0 || tileX >= MaximumWidth || tileY >= MaximumHeight)
-                    continue;
-
-                yield return new XY(tileX, tileY);
-            }
-        }
+        private bool GreaterThanZero(params int[] values) => values.All(v => v > 0);
+        private bool IsValidGridPosition(int x, int y) => x < 0 || y < 0 || x >= MaximumWidth || y >= MaximumHeight;
     }
 }
