@@ -4,9 +4,8 @@
     {
         public override TileType Type => TileType.Room;
 
-        public TileRoom(int x, int y) : base(x, y, Constants.TILE_NAME_ROOM)
+        public TileRoom(int x, int y, string name, byte cost) : base(x, y, name, cost)
         {
-            Cost = (byte)(int)Type;
         }
     }
 }

@@ -8,22 +8,6 @@ namespace CrabSeek.Connectors
     public class TileGrid
     {
         /// <summary>
-        /// The collection of Tiles provided at instantiation, offset by the maximum lowest/high X and Y
-        /// to construct a Tile collection with compact XY values.
-        /// </summary>
-        public ITile[,] Tiles { get; }
-
-        /// <summary>
-        /// The Width of the Tiles supplied at instantiation - the distance between the minimum/maximum Tile X value.
-        /// </summary>
-        public int Width { get; } = 0;
-
-        /// <summary>
-        /// The Width of the Tiles supplied at instantiation - the distance between the minimum/maximum Tile X value.
-        /// </summary>
-        public int Height { get; } = 0;
-
-        /// <summary>
         /// Creates a new instance of TileGrid using data from the supplied Tiles.
         /// The Width and Height values are derived from the distance between the lowest/highest X and Y,
         /// so may not match the original XY values after conversion to a grid.
@@ -53,6 +37,22 @@ namespace CrabSeek.Connectors
                 Tiles[tile.Y, tile.X] = tile;
             }
         }
+
+        /// <summary>
+        /// The collection of Tiles provided at instantiation, offset by the maximum lowest/high X and Y
+        /// to construct a Tile collection with compact XY values.
+        /// </summary>
+        public ITile[,] Tiles { get; }
+
+        /// <summary>
+        /// The Width of the Tiles supplied at instantiation - the distance between the minimum/maximum Tile X value.
+        /// </summary>
+        public int Width { get; } = 0;
+
+        /// <summary>
+        /// The Width of the Tiles supplied at instantiation - the distance between the minimum/maximum Tile X value.
+        /// </summary>
+        public int Height { get; } = 0;
 
         /// <summary>
         /// Converts the Tile grid to a single-line string, using the first character of each Tile name.

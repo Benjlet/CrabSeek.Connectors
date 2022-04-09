@@ -2,12 +2,12 @@
 {
     internal abstract class Tile : ITile
     {
-        public Tile(int x, int y, string name)
+        public Tile(int x, int y, string name, byte cost)
         {
             X = x;
             Y = y;
             Name = name;
-            Cost = (byte)(int)Type;
+            Cost = cost;
         }
 
         public int X { get; set; }

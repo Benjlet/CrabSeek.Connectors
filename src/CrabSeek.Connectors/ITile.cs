@@ -16,7 +16,7 @@
         int Y { get; set; }
 
         /// <summary>
-        /// The cost of moving to this tile, to be used for with functions.
+        /// The cost of moving to this tile, to be used with heuristic functions.
         /// </summary>
         byte Cost { get; set; }
 

@@ -18,6 +18,16 @@
         }
 
         /// <summary>
+        /// The byte cost representation of moving to a connector tile.
+        /// </summary>
+        public byte ConnectorCost { get; set; } = 1;
+
+        /// <summary>
+        /// The byte cost representation of moving to a room tile.
+        /// </summary>
+        public byte RoomCost { get; set; } = 2;
+
+        /// <summary>
         /// The maximum height of the room grid. 16 by default.
         /// </summary>
         public int MaximumHeight { get; set; } = 16;
@@ -78,7 +88,9 @@
             
             _tiles.Add(new TileRoom(
                 Util.GetRandomEvenNumber(MaximumWidth),
-                Util.GetRandomEvenNumber(MaximumHeight)));
+                Util.GetRandomEvenNumber(MaximumHeight),
+                Constants.TILE_NAME_ROOM,
+                RoomCost));
 
             int createdRooms = _tiles.Count;
 
@@ -124,7 +136,7 @@
                 bool hasThisConnectionAlready = _connectionTiles.Any(c => c.HasXY(corridorRoom));
 
                 if (!hasThisConnectionAlready)
-                    yield return new TileConnector(corridorRoom.X, corridorRoom.Y);
+                    yield return new TileConnector(corridorRoom.X, corridorRoom.Y, Constants.TILE_NAME_ROOM, RoomCost);
             }
         }
 
@@ -137,19 +149,19 @@
                 var tileX = tile.X + offset.X;
                 var tileY = tile.Y + offset.Y;
 
-                if (IsValidGridPosition(tileX, tileY))
+                if (IsOffGrid(tileX, tileY))
                     continue;
 
                 var found = _tiles.Any(t => t.X == tileX && t.Y == tileY);
 
                 if (!found)
                 {
-                    _tiles.Add(new TileRoom(tileX, tileY));
+                    _tiles.Add(new TileRoom(tileX, tileY, Constants.TILE_NAME_ROOM, RoomCost));
 
                     var corridorRoom = GetConnectorBetween(tile, new XY(tileX, tileY));
 
                     if (UseConnectors)
-                        _connectionTiles.Add(new TileConnector(corridorRoom.X, corridorRoom.Y));
+                        _connectionTiles.Add(new TileConnector(corridorRoom.X, corridorRoom.Y, Constants.TILE_NAME_CONNECTOR, ConnectorCost));
 
                     return true;
                 }
@@ -179,7 +191,7 @@
                 var tileX = tile.X + posOffset[i].X;
                 var tileY = tile.Y + posOffset[i].Y;
 
-                if (IsValidGridPosition(tileX, tileY))
+                if (IsOffGrid(tileX, tileY))
                     continue;
 
                 yield return new XY(tileX, tileY);
@@ -194,10 +206,10 @@
             new XY(0, UseConnectors ? Constants.TILE_STEP_CONNECTORS : Constants.TILE_STEP)
         };
 
-        private IEnumerable<XY> GetTakenAdjacentTiles(ITile tile) => GetAdjacentTiles(tile).Where(a => _tiles.Any(t => t.HasXY(a)));
+        private IEnumerable<XY> GetTakenAdjacentTiles(ITile tile) => GetAdjacentTiles(tile)?.Where(a => _tiles.Any(t => t.HasXY(a)));
 
         private IEnumerable<XY> GetAvailableAdjacentTiles(ITile tile) => GetAdjacentTiles(tile)?.Where(a => !_tiles.Any(t => t.HasXY(a)));
 
-        private bool IsValidGridPosition(int x, int y) => x < 0 || y < 0 || x >= MaximumWidth || y >= MaximumHeight;
+        private bool IsOffGrid(int x, int y) => x < 0 || y < 0 || x >= MaximumWidth || y >= MaximumHeight;
     }
 }

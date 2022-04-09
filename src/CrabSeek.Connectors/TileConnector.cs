@@ -2,11 +2,10 @@
 {
     internal class TileConnector : Tile
     {
-        public override TileType Type => TileType.Connector;
-
-        public TileConnector(int x, int y) : base(x, y, Constants.TILE_NAME_CONNECTOR)
+        public TileConnector(int x, int y, string name, byte cost) : base(x, y, name, cost)
         {
-            Cost = (byte)(int)Type;
         }
+
+        public override TileType Type => TileType.Connector;
     }
 }
