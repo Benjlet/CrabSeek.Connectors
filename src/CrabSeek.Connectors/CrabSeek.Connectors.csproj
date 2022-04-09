@@ -16,6 +16,7 @@
     <PackageTags>grid;tile;pathfinding;algorithms;csharp;</PackageTags>
     <PackageProjectUrl>https://github.com/Benjlet/CrabSeek.Connectors</PackageProjectUrl>
     <Description>Tile-grid generation for C# .NET.</Description>
+    <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
   </PropertyGroup>
 
   <ItemGroup>
