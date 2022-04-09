@@ -19,6 +19,8 @@ namespace CrabSeek.Connectors.Tests
             };
 
             var tiles = tileGenerator.GenerateTiles(numberOfRooms);
+
+            TestHelper.PrintGrid(new TileGrid(tiles));
             Assert.IsTrue(tiles.Count(t => t.Type == TileType.Room) == numberOfRooms);
         }
 
@@ -42,6 +44,7 @@ namespace CrabSeek.Connectors.Tests
 
             var tiles = tileGenerator.GenerateTiles(roomNames);
 
+            TestHelper.PrintGrid(new TileGrid(tiles));
             Assert.IsTrue(tiles.Count() == roomNames.Length);
             Assert.IsTrue(tiles.All(t => roomNames.Contains(t.Name)));
         }
@@ -57,6 +60,7 @@ namespace CrabSeek.Connectors.Tests
 
             var tiles = tileGenerator.GenerateTiles(Enumerable.Empty<string>());
 
+            TestHelper.PrintGrid(new TileGrid(tiles));
             Assert.IsFalse(tiles.Any());
         }
 
@@ -75,6 +79,7 @@ namespace CrabSeek.Connectors.Tests
 
             var tiles = tileGenerator.GenerateTiles(totalRooms);
 
+            TestHelper.PrintGrid(new TileGrid(tiles));
             Assert.IsTrue(tiles.Count() == totalRooms);
             Assert.IsTrue(tiles.All(t => t.Y <= height));
             Assert.IsTrue(tiles.All(t => t.Type == TileType.Room));
@@ -95,6 +100,7 @@ namespace CrabSeek.Connectors.Tests
 
             var tiles = tileGenerator.GenerateTiles(totalRooms);
 
+            TestHelper.PrintGrid(new TileGrid(tiles));
             Assert.IsTrue(tiles.Count() == totalRooms);
             Assert.IsTrue(tiles.All(t => t.X <= width));
             Assert.IsTrue(tiles.All(t => t.Type == TileType.Room));
@@ -115,6 +121,7 @@ namespace CrabSeek.Connectors.Tests
 
             var tiles = tileGenerator.GenerateTiles(totalRooms);
 
+            TestHelper.PrintGrid(new TileGrid(tiles));
             Assert.IsFalse(tiles.Any());
         }
 
@@ -132,7 +139,8 @@ namespace CrabSeek.Connectors.Tests
             };
 
             var tiles = tileGenerator.GenerateTiles(totalRooms);
-            
+
+            TestHelper.PrintGrid(new TileGrid(tiles));
             Assert.IsFalse(tiles.Any());
         }
 
@@ -150,6 +158,7 @@ namespace CrabSeek.Connectors.Tests
 
             var tiles = tileGenerator.GenerateTiles(totalRooms);
 
+            TestHelper.PrintGrid(new TileGrid(tiles));
             Assert.IsTrue(tiles.Count() == totalRooms);
             Assert.IsTrue(tiles.All(t => t.Type == TileType.Room));
         }
@@ -168,6 +177,7 @@ namespace CrabSeek.Connectors.Tests
 
             var tiles = tileGenerator.GenerateTiles(totalRooms);
 
+            TestHelper.PrintGrid(new TileGrid(tiles));
             Assert.IsTrue(tiles.Count(t => t.Type == TileType.Room) == totalRooms);
             Assert.IsTrue(tiles.Count(t => t.Type == TileType.Connector) >= totalRooms - 1);
         }
@@ -187,6 +197,7 @@ namespace CrabSeek.Connectors.Tests
 
             var tiles = tileGenerator.GenerateTiles(totalRooms);
 
+            TestHelper.PrintGrid(new TileGrid(tiles));
             Assert.IsTrue(tiles.Count(t => t.Type == TileType.Room) == totalRooms);
             Assert.IsTrue(tiles.Count(t => t.Type == TileType.Connector) == totalRooms - 1);
         }
@@ -206,6 +217,7 @@ namespace CrabSeek.Connectors.Tests
 
             var tiles = tileGenerator.GenerateTiles(totalRooms);
 
+            TestHelper.PrintGrid(new TileGrid(tiles));
             Assert.IsTrue(tiles.Count(t => t.Type == TileType.Room) == totalRooms);
             Assert.IsTrue(tiles.Count(t => t.Type == TileType.Connector) >= totalRooms - 1);
         }

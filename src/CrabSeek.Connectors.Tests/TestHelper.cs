@@ -4,7 +4,7 @@ using System.Text;
 
 namespace CrabSeek.Connectors.Tests
 {
-    internal class TestUtils
+    internal class TestHelper
     {
         public static void PrintGridLines(string[] grid)
         {
@@ -31,7 +31,7 @@ namespace CrabSeek.Connectors.Tests
 
             for (int i = 0; i < byteGrid.GetLength(0); i++)
             {
-                for (int j = 0; j < byteGrid.GetLength(0); j++)
+                for (int j = 0; j < byteGrid.GetLength(1); j++)
                 {
                     sb.Append(byteGrid[i, j]);
                 }

@@ -2,17 +2,13 @@
 {
     internal struct XY
     {
-        public XY()
-        {
-        }
-
-        public XY(int x, int y)
+        internal XY(int x, int y)
         {
             X = x;
             Y = y;
         }
 
-        public int X { get; set; } = 0;
-        public int Y { get; set; } = 0;
+        internal int X { get; set; }
+        internal int Y { get; set; }
     }
 }

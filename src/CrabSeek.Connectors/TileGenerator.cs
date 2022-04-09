@@ -1,12 +1,12 @@
 ﻿namespace CrabSeek.Connectors
 {
     /// <summary>
-    /// Generates
+    /// Generates collections of Tiles based on settings of this class and method inputs.
     /// </summary>
     public class TileGenerator
     {
-        private List<ITile> _tiles;
-        private List<ITile> _connectionTiles;
+        private readonly List<ITile> _tiles;
+        private readonly List<ITile> _connectionTiles;
 
         /// <summary>
         /// Initialises a new configurable TileGenerator, used to generate tiles and their positions.
@@ -18,14 +18,14 @@
         }
 
         /// <summary>
-        /// The maximum height of the room grid. 32 by default.
+        /// The maximum height of the room grid. 16 by default.
         /// </summary>
-        public int MaximumHeight { get; set; } = 32;
+        public int MaximumHeight { get; set; } = 16;
 
         /// <summary>
-        /// The maximum width of the room grid. 32 by default.
+        /// The maximum width of the room grid. 16 by default.
         /// </summary>
-        public int MaximumWidth { get; set; } = 32;
+        public int MaximumWidth { get; set; } = 16;
 
         /// <summary>
         /// If set, single-tile connections are generated between rooms.
@@ -70,19 +70,15 @@
         /// <returns>A collection of tiles.</returns>
         public IEnumerable<ITile> GenerateTiles(int roomsToCreate)
         {
-            _tiles = new List<ITile>();
-            _connectionTiles = new List<ITile>();
+            _tiles.Clear();
+            _connectionTiles?.Clear();
 
-            if (GreaterThanZero(roomsToCreate, MaximumHeight, MaximumWidth))
-            {
-                _tiles.Add(new TileRoom(
-                    Util.GetRandomEvenNumber(MaximumWidth),
-                    Util.GetRandomEvenNumber(MaximumHeight)));
-            }
-            else
-            {
+            if (!Util.GreaterThanZero(roomsToCreate, MaximumHeight, MaximumWidth))
                 return _tiles;
-            }
+            
+            _tiles.Add(new TileRoom(
+                Util.GetRandomEvenNumber(MaximumWidth),
+                Util.GetRandomEvenNumber(MaximumHeight)));
 
             int createdRooms = _tiles.Count;
 
@@ -165,11 +161,9 @@
         private XY GetConnectorBetween(ITile tile, XY end)
         {
             if (end.X == tile.X)
-            {
                 return end.Y > tile.Y
                     ? new XY(tile.X, tile.Y + Constants.TILE_STEP)
                     : new XY(tile.X, tile.Y - Constants.TILE_STEP);
-            }
 
             return end.X > tile.X
                 ? new XY(tile.X + Constants.TILE_STEP, tile.Y)
@@ -200,19 +194,10 @@
             new XY(0, UseConnectors ? Constants.TILE_STEP_CONNECTORS : Constants.TILE_STEP)
         };
 
-        private IEnumerable<XY> GetTakenAdjacentTiles(ITile tile)
-        {
-            var adjacentTiles = GetAdjacentTiles(tile);
-            return adjacentTiles.Where(a => _tiles.Any(t => t.HasXY(a)));
-        }
+        private IEnumerable<XY> GetTakenAdjacentTiles(ITile tile) => GetAdjacentTiles(tile).Where(a => _tiles.Any(t => t.HasXY(a)));
 
-        private IEnumerable<XY> GetAvailableAdjacentTiles(ITile tile)
-        {
-            var adjacentTiles = GetAdjacentTiles(tile);
-            return adjacentTiles.Where(a => !_tiles.Any(t => t.HasXY(a)));
-        }
+        private IEnumerable<XY> GetAvailableAdjacentTiles(ITile tile) => GetAdjacentTiles(tile)?.Where(a => !_tiles.Any(t => t.HasXY(a)));
 
-        private bool GreaterThanZero(params int[] values) => values.All(v => v > 0);
         private bool IsValidGridPosition(int x, int y) => x < 0 || y < 0 || x >= MaximumWidth || y >= MaximumHeight;
     }
 }
