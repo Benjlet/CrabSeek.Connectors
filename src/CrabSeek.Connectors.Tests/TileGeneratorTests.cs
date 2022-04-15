@@ -183,7 +183,7 @@ namespace CrabSeek.Connectors.Tests
         }
 
         [Test]
-        public void GivenConnectAllAdjacentEnabled_ShouldConnectAllRooms()
+        public void GivenConnectAllAdjacentDisabled_ShouldConnectAllRooms()
         {
             int totalRooms = 10;
 
@@ -203,7 +203,7 @@ namespace CrabSeek.Connectors.Tests
         }
 
         [Test]
-        public void GivenConnectAllAdjacentDisabled_ShouldConnectAllRooms()
+        public void GivenConnectAllAdjacentEnabled_ShouldConnectAllRooms()
         {
             int totalRooms = 10;
 

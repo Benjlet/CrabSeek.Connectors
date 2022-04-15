@@ -136,7 +136,7 @@
                 bool hasThisConnectionAlready = _connectionTiles.Any(c => c.HasXY(corridorRoom));
 
                 if (!hasThisConnectionAlready)
-                    yield return new TileConnector(corridorRoom.X, corridorRoom.Y, Constants.TILE_NAME_ROOM, RoomCost);
+                    yield return new TileConnector(corridorRoom.X, corridorRoom.Y, Constants.TILE_NAME_CONNECTOR, ConnectorCost);
             }
         }
 

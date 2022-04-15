@@ -22,7 +22,7 @@ namespace CrabSeek.Connectors.Tests
             PrintGridLines(grid.ToStringArray());
 
             Console.WriteLine("\nBASE2 BYTE GRID:\n");
-            PrintByteGrid(grid.ToBase2ByteGrid(false));
+            PrintByteGrid(grid.ToBase2ByteGrid(true));
         }
 
         private static void PrintByteGrid(byte[,] byteGrid)
