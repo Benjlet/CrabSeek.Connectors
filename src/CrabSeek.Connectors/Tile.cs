@@ -14,6 +14,6 @@
         public int Y { get; set; }
         public byte Cost { get; set; }
         public string Name { get; set; }
-        public virtual TileType Type => TileType.Inaccessible;
+        public virtual TileType Type { get; set; } = TileType.Inaccessible;
     }
 }

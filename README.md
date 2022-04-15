@@ -2,6 +2,8 @@
 
 CrabSeek.Connectors is a library for generating basic tile-grids and their connectors - an intermediate type of room, used to link adjacent rooms. The generated grids are pseudo-random and have various settings that can be configured, such as the maximum Height, Width, custom names for tiles, etc.
 
+[![nuget](https://badgen.net/nuget/v/CrabSeek.Connectors?icon=nuget)](https://www.nuget.org/packages/CrabSeek.Connectors)
+
 ## Rationale
 A description of the use of this library is as follows:
 
@@ -11,7 +13,7 @@ A description of the use of this library is as follows:
 
 CrabSeek.Connectors is part of the CrabSeek family!
 
-### CrabSeek
+## CrabSeek
 
 A* pathfinding implementation.
 

@@ -28,6 +28,6 @@
         /// <summary>
         /// The type of this tile, such as a Room or Connector.
         /// </summary>
-        TileType Type { get; }
+        TileType Type { get; set; }
     }
 }

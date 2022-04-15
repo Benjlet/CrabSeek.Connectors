@@ -12,8 +12,9 @@ namespace CrabSeek.Connectors
         /// The Width and Height values are derived from the distance between the lowest/highest X and Y,
         /// so may not match the original XY values after conversion to a grid.
         /// </summary>
-        /// <param name="tiles"></param>
-        public TileGrid(IEnumerable<ITile> tiles)
+        /// <param name="tiles">Tile positional data.</param>
+        /// <param name="centerAlign">true/false - align tiles so they appear in the mid-center of the grid?</param>
+        public TileGrid(IEnumerable<ITile> tiles, bool centerAlign = true)
         {
             if (tiles == null || !tiles.Any())
             {
@@ -32,8 +33,11 @@ namespace CrabSeek.Connectors
 
             foreach (var tile in tiles)
             {
-                tile.X -= minX;
-                tile.Y -= minY;
+                if (centerAlign)
+                {
+                    tile.X -= minX;
+                    tile.Y -= minY;
+                }
                 Tiles[tile.Y, tile.X] = tile;
             }
         }

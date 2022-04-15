@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace CrabSeek.Connectors.Tests
+﻿namespace CrabSeek.Connectors.Tests
 {
     internal class TestTile : ITile
     {
@@ -20,6 +14,6 @@ namespace CrabSeek.Connectors.Tests
         public int Y { get; set; }
         public byte Cost { get; set; }
         public string Name { get; set; }
-        public TileType Type => TileType.Room;
+        public TileType Type { get; set; } = TileType.Room;
     }
 }

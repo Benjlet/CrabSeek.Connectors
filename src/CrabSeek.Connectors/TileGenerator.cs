@@ -18,12 +18,12 @@
         }
 
         /// <summary>
-        /// The byte cost representation of moving to a connector tile.
+        /// The byte cost representation of moving to a connector tile. 1 by default.
         /// </summary>
         public byte ConnectorCost { get; set; } = 1;
 
         /// <summary>
-        /// The byte cost representation of moving to a room tile.
+        /// The byte cost representation of moving to a room tile. 2 by default.
         /// </summary>
         public byte RoomCost { get; set; } = 2;
 
