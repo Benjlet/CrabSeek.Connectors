@@ -26,8 +26,8 @@ namespace CrabSeek.Connectors
             var minY = tiles.Min(r => r.Y);
             var maxY = tiles.Max(r => r.Y);
 
-            Height = maxY - minY + 1;
-            Width = maxX - minX + 1;
+            Height = (centerAlign ? maxY - minY : maxY) + 1;
+            Width = (centerAlign ? maxX - minX : maxX) + 1;
 
             Tiles = new ITile[Height, Width];
 
@@ -99,7 +99,7 @@ namespace CrabSeek.Connectors
         public string[] ToStringArray()
         {
             var gridString = ToString();
-            return gridString.Split(Environment.NewLine, StringSplitOptions.RemoveEmptyEntries);
+            return gridString.Split(Environment.NewLine, StringSplitOptions.RemoveEmptyEntries).Reverse().ToArray();
         }
 
         /// <summary>
@@ -108,7 +108,7 @@ namespace CrabSeek.Connectors
         /// The Tiles of this TileGrid instance are centred upon the returned byte grid.
         /// </summary>
         /// <returns>A two-dimensional byte array, representing grid tile costs.</returns>
-        public byte[,] ToBase2ByteGrid()
+        public byte[,] ToBase2ByteGrid(bool centreOnGrid = true)
         {
             var gridSize = Util.GetBase2GridSize(Width, Height);
             var grid = new byte[gridSize, gridSize];
@@ -117,8 +117,8 @@ namespace CrabSeek.Connectors
                 for (int j = 0; j < gridSize; j++)
                     grid[i, j] = 0;
 
-            var diffX = Util.GreaterThanZero((int)gridSize, Width) ? ((int)gridSize - Width) / 2 : 0;
-            var diffY = Util.GreaterThanZero((int)gridSize, Height) ? ((int)gridSize - Height) / 2 : 0;
+            var diffX = centreOnGrid && Util.GreaterThanZero((int)gridSize, Width) ? ((int)gridSize - Width) / 2 : 0;
+            var diffY = centreOnGrid && Util.GreaterThanZero((int)gridSize, Height) ? ((int)gridSize - Height) / 2 : 0;
 
             for (int i = 0; i < Height; i++)
                 for (int j = 0; j < Width; j++)

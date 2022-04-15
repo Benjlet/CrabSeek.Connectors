@@ -57,7 +57,6 @@ namespace CrabSeek.Connectors.Tests
             var gridBytes = grid.ToBase2ByteGrid();
 
             TestHelper.PrintGrid(grid);
-            TestHelper.PrintByteGrid(gridBytes);
 
             Assert.IsEmpty(gridBytes);
         }
@@ -69,7 +68,6 @@ namespace CrabSeek.Connectors.Tests
             var gridBytes = grid.ToBase2ByteGrid();
 
             TestHelper.PrintGrid(grid);
-            TestHelper.PrintByteGrid(gridBytes);
 
             Assert.IsEmpty(gridBytes);
         }
@@ -95,7 +93,6 @@ namespace CrabSeek.Connectors.Tests
             var expectedSize = 4;
 
             TestHelper.PrintGrid(grid);
-            TestHelper.PrintByteGrid(gridBytes);
             Assert.IsTrue(gridWidth == expectedSize);
             Assert.IsTrue(gridHeight == expectedSize);
         }
@@ -124,9 +121,24 @@ namespace CrabSeek.Connectors.Tests
             var expectedSize = 8;
 
             TestHelper.PrintGrid(grid);
-            TestHelper.PrintByteGrid(gridBytes);
             Assert.IsTrue(gridWidth == expectedSize);
             Assert.IsTrue(gridHeight == expectedSize);
+        }
+
+        [Test]
+        public void GivenGridCollection_IfNotCentreAlign_ShouldNotCentreAlign()
+        {
+            var tiles = new List<ITile>()
+            {
+                new TestTile(1, 0, "ROOM-1", 4),
+                new TestTile(2, 0, "ROOM-2", 4),
+                new TestTile(3, 0, "ROOM-3", 4),
+                new TestTile(4, 0, "ROOM-4", 4),
+            };
+
+            var grid = new TileGrid(tiles, false);
+
+            TestHelper.PrintGrid(grid);
         }
     }
 }

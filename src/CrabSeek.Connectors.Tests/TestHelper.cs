@@ -6,7 +6,7 @@ namespace CrabSeek.Connectors.Tests
 {
     internal class TestHelper
     {
-        public static void PrintGridLines(string[] grid)
+        private static void PrintGridLines(string[] grid)
         {
             Console.WriteLine("╔" + new string('═', (grid.Count() > 0 ? grid.Max(s => s.Length) : 0) + 2) + "╗");
 
@@ -22,16 +22,16 @@ namespace CrabSeek.Connectors.Tests
             PrintGridLines(grid.ToStringArray());
 
             Console.WriteLine("\nBASE2 BYTE GRID:\n");
-            PrintByteGrid(grid.ToBase2ByteGrid());
+            PrintByteGrid(grid.ToBase2ByteGrid(false));
         }
 
-        public static void PrintByteGrid(byte[,] byteGrid)
+        private static void PrintByteGrid(byte[,] byteGrid)
         {
             var sb = new StringBuilder();
 
-            for (int i = 0; i < byteGrid.GetLength(0); i++)
+            for (int i = 0; i < byteGrid.GetLength(1); i++)
             {
-                for (int j = 0; j < byteGrid.GetLength(1); j++)
+                for (int j = 0; j < byteGrid.GetLength(0); j++)
                 {
                     sb.Append(byteGrid[i, j]);
                 }
@@ -39,7 +39,7 @@ namespace CrabSeek.Connectors.Tests
                 sb.AppendLine();
             }
 
-            var gridLines = sb.ToString().Split(Environment.NewLine, StringSplitOptions.RemoveEmptyEntries);
+            var gridLines = sb.ToString().Split(Environment.NewLine, StringSplitOptions.RemoveEmptyEntries).Reverse().ToArray();
             PrintGridLines(gridLines);
         }
     }
